@@ -39,7 +39,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: 'Update Terraform Format'
           branch: 'create-pull-request/terraform-format'
-          branch-suffix: timestamp
           commit-message: 'Update Terraform Format'
           delete-branch: true
           body: 'Format Terraform files'
