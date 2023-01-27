@@ -1,4 +1,4 @@
-name: "Update Hosts"
+name: "Terraform"
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 jobs:
   format:
     if: github.event_name == 'push'
-    name: "Format Terraform Files"
+    name: "Format Files"
     runs-on: ubuntu-latest
     permissions:
       contents: write
