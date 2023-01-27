@@ -1,0 +1,68 @@
+name: "Update Hosts"
+
+on:
+  push:
+  schedule:
+    - cron: '0 0 */7 * *'
+
+jobs:
+  format:
+    if: github.event_name == 'push'
+    name: "Terraform Format"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Create Pull Request
+        if: steps.fmt.outcome == 'failure'
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: 'Update Terraform Format'
+          branch: 'create-pull-request/terraform-format'
+          branch-suffix: timestamp
+          commit-message: 'Update Terraform Format'
+          delete-branch: true
+          body: 'Update'
+
+  update:
+    name: "Update Hosts"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -input=false
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve -input=false
