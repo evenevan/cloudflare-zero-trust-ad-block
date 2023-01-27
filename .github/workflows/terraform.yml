@@ -65,7 +65,11 @@ jobs:
       - name: Generate Parameters
         id: params
         run: |
-          if [[ "${{ secrets.HOSTS_URL }}" == "" ]]; then echo "params=-var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }}"" >> $GITHUB_OUTPUT; else echo "params=-var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }} -var='hosts_url=${{ secrets.HOSTS_URL }}"" >> $GITHUB_OUTPUT; fi
+          if [[ "${{ secrets.HOSTS_URL }}" == "" ]]; then
+            echo "params=-var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }}"" >> $GITHUB_OUTPUT;
+          else
+            echo "params=-var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }} -var='hosts_url=${{ secrets.HOSTS_URL }}"" >> $GITHUB_OUTPUT;
+          fi
 
       - name: Terraform Plan
         run: terraform plan -no-color -input=false ${{ steps.params.outputs.params }}'
