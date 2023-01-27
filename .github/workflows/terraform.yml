@@ -8,7 +8,7 @@ on:
 jobs:
   format:
     if: github.event_name == 'push'
-    name: "Terraform Format"
+    name: "Format Terraform Files"
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -22,10 +22,14 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: Terraform Format
+      - name: Terraform Format Check
         id: fmt
         run: terraform fmt -check
         continue-on-error: true
+
+      - name: Terraform Format
+        if: steps.fmt.outcome == 'failure'
+        run: terraform fmt
 
       - name: Create Pull Request
         if: steps.fmt.outcome == 'failure'
@@ -37,7 +41,7 @@ jobs:
           branch-suffix: timestamp
           commit-message: 'Update Terraform Format'
           delete-branch: true
-          body: 'Update'
+          body: 'Format Terraform files'
 
   update:
     name: "Update Hosts"
@@ -52,17 +56,13 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Init
-        id: init
         run: terraform init
       
       - name: Terraform Validate
-        id: validate
         run: terraform validate -no-color
 
       - name: Terraform Plan
-        id: plan
         run: terraform plan -no-color -input=false
 
       - name: Terraform Apply
-        id: apply
         run: terraform apply -auto-approve -input=false
