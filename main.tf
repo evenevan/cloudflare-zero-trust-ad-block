@@ -27,13 +27,18 @@ variable "cf_account_id" {
   type = string
 }
 
+variable "hosts_url" {
+  type = string
+  default = "https://adaway.org/hosts.txt"
+}
+
 provider "cloudflare" {
   api_token = var.cf_api_token
 }
 
 data "curl" "get_hosts" {
   http_method = "GET"
-  uri         = "https://adaway.org/hosts.txt"
+  uri         = var.hosts_url
 }
 
 locals {

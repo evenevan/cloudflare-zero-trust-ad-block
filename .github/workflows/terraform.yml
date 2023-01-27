@@ -63,7 +63,7 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform Plan
-        run: terraform plan -no-color -input=false -var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }}'
+        run: terraform plan -no-color -input=false -var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }} -var='hosts_url=${{ secrets.HOSTS_URL }}'
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -input=false -var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }}'
+        run: terraform apply -auto-approve -input=false -var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }} -var='hosts_url=${{ secrets.HOSTS_URL }}'
