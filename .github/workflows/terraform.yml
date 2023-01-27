@@ -62,11 +62,11 @@ jobs:
       - name: Terraform Validate
         run: terraform validate -no-color
 
-     - name: Generate Parameters
-      - id: params
-        - if: secrets.HOSTS_URL == ''
+      - name: Generate Parameters
+        id: params
+          if: secrets.HOSTS_URL == ''
           run: echo "params=-var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }}"" >> $GITHUB_OUTPUT
-        - if: secrets.HOSTS_URL != ''
+          if: secrets.HOSTS_URL != ''
           run: echo "params=-var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }} -var='hosts_url=${{ secrets.HOSTS_URL }}"" >> $GITHUB_OUTPUT
 
       - name: Terraform Plan
