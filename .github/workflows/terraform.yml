@@ -44,7 +44,7 @@ jobs:
           body: 'Format Terraform files'
 
   update:
-    if: github.event_name == 'schedule'
+    if: github.event_name != 'push'
     name: "Update Hosts"
     runs-on: ubuntu-latest
     steps:
