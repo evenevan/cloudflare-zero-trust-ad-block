@@ -65,7 +65,7 @@ jobs:
       - name: Generate Parameters
         id: params
         run: |
-          params = "params='-var=cf_api_token=${{ secrets.CF_API_TOKEN }}' '-var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }}"
+          params = "params='-var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var=cf_account_id=${{ secrets.CF_ACCOUNT_ID }}'"
 
           if [ "${{ secrets.HOSTS_URL }}" != "" ]; then
             params += " var='hosts_url=${{ secrets.HOSTS_URL }}"
