@@ -44,6 +44,7 @@ jobs:
           body: 'Format Terraform files'
 
   update:
+    if: github.event_name == 'schedule'
     name: "Update Hosts"
     runs-on: ubuntu-latest
     steps:
@@ -62,7 +63,7 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform Plan
-        run: terraform plan -no-color -input=false
+        run: terraform plan -no-color -input=false -var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }}'
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -input=false
+        run: terraform apply -auto-approve -input=false -var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var='cf_account_id=${{ secrets.CF_ACCOUNT_ID }}'
