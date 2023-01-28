@@ -3,7 +3,7 @@ terraform {
     organization = "Attituding"
 
     workspaces {
-      name = "cloudflare_zero_trust"
+      name = "cloudflare_zero_trust_ad_block"
     }
   }
   required_providers {
@@ -56,7 +56,6 @@ locals {
   cf_hosts_traffic         = join(" or ", formatlist("any(dns.domains[*] in %s)", local.cf_hosts_lists_formatted))
 }
 
-# Generate lists for advertisment blocking
 resource "cloudflare_teams_list" "hosts_lists" {
   account_id = var.cf_account_id
 
