@@ -38,7 +38,7 @@ data "curl" "get_hosts" {
 
 locals {
   hosts           = split("\n", data.curl.get_hosts.response)
-  hosts_formatted = [for host in local.hosts : split(" ", host)[1] if host != "" && !startswith(host, "#") && !contains(var.hosts_invalid, ["127.0.0.1  localhost", "::1  localhost"])]
+  hosts_formatted = [for host in local.hosts : split(" ", host)[1] if host != "" && !startswith(host, "#") && !contains(["127.0.0.1  localhost", "::1  localhost"], host)]
   hosts_lists     = chunklist(local.hosts_formatted, 1000)
 
   cf_hosts_lists           = [for key, value in cloudflare_teams_list.hosts_lists : value.id]
