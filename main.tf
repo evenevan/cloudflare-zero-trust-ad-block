@@ -27,28 +27,18 @@ variable "cf_account_id" {
   type = string
 }
 
-variable "hosts_invalid" {
-  type = list(string)
-  default = tolist(["127.0.0.1  localhost", "::1  localhost"])
-}
-
-variable "hosts_url" {
-  type = string
-  default = "https://adaway.org/hosts.txt"
-}
-
 provider "cloudflare" {
   api_token = var.cf_api_token
 }
 
 data "curl" "get_hosts" {
   http_method = "GET"
-  uri         = var.hosts_url
+  uri         = "https://adaway.org/hosts.txt"
 }
 
 locals {
   hosts           = split("\n", data.curl.get_hosts.response)
-  hosts_formatted = [for host in local.hosts : split(" ", host)[1] if host != "" && !startswith(host, "#") && !contains(var.hosts_invalid, host)]
+  hosts_formatted = [for host in local.hosts : split(" ", host)[1] if host != "" && !startswith(host, "#") && !contains(var.hosts_invalid, ["127.0.0.1  localhost", "::1  localhost"])]
   hosts_lists     = chunklist(local.hosts_formatted, 1000)
 
   cf_hosts_lists           = [for key, value in cloudflare_teams_list.hosts_lists : value.id]
