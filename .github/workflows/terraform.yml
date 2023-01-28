@@ -68,15 +68,15 @@ jobs:
           params="params=-var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var=cf_account_id=${{ secrets.CF_ACCOUNT_ID }}"
 
           if [ "${{ secrets.HOSTS_URL }}" != "" ]; then
-            params+=" var=hosts_url=${{ secrets.HOSTS_URL }}"
+            params+=" -var=hosts_url=${{ secrets.HOSTS_URL }}"
           elif [ "${{ secrets.HOSTS_INVALID }}" != "" ]; then
-            params+=" var=hosts_invalid=${{ secrets.HOSTS_INVALID }}"
+            params+=" -var=hosts_invalid=${{ secrets.HOSTS_INVALID }}"
           fi
 
           echo $params >> $GITHUB_OUTPUT
 
       - name: Terraform Plan
-        run: terraform plan -no-color -input=false ${{ steps.params.outputs.params }}'
+        run: terraform plan -no-color -input=false ${{ steps.params.outputs.params }}
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -input=false ${{ steps.params.outputs.params }}'
+        run: terraform apply -auto-approve -input=false ${{ steps.params.outputs.params }}
