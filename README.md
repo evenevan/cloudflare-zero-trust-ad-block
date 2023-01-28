@@ -16,4 +16,10 @@ This project automatically fetches, parses, uploads, and sets host lists to Clou
 
 ## Attribution
 
-Some aspects of this project are inspired by [marco-lancini/utils/terraform/cloudflare-gateway-adblocking]("https://github.com/marco-lancini/utils/tree/main/terraform/cloudflare-gateway-adblocking") and bares a resemblance.
+Some aspects of this project are inspired by [marco-lancini/utils/terraform/cloudflare-gateway-adblocking]("https://github.com/marco-lancini/utils/tree/main/terraform/cloudflare-gateway-adblocking").
+
+Host lists used by default:
+https://adaway.org/hosts.txt
+https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+https://blocklistproject.github.io/Lists/ransomware.txt
+https://blocklistproject.github.io/Lists/tracking.txt

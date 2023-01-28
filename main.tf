@@ -32,9 +32,10 @@ variable "hosts_invalid" {
   default = ["127.0.0.1  localhost", "::1  localhost"]
 }
 
-variable "hosts_url" {
-  type = string
-  default = "https://adaway.org/hosts.txt"
+// uses the hosts file format
+variable "hosts_urls" {
+  type = list(string)
+  default = ["https://adaway.org/hosts.txt", "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext", "https://blocklistproject.github.io/Lists/ransomware.txt", "https://blocklistproject.github.io/Lists/tracking.txt"]
 }
 
 provider "cloudflare" {
@@ -42,13 +43,14 @@ provider "cloudflare" {
 }
 
 data "curl" "get_hosts" {
+  for_each = toset(var.hosts_urls)
   http_method = "GET"
-  uri         = var.hosts_url
+  uri         = each.value
 }
 
 locals {
-  hosts           = split("\n", data.curl.get_hosts.response)
-  hosts_formatted = [for host in local.hosts : split(" ", host)[1] if host != "" && !startswith(host, "#") && !contains(var.hosts_invalid, host)]
+  hosts           = flatten([for k, v in data.curl.get_hosts : split("\n", v.response)])
+  hosts_formatted = distinct([for host in local.hosts : split(" ", host)[1] if host != "" && !startswith(host, "#") && !contains(var.hosts_invalid, host)])
   hosts_lists     = chunklist(local.hosts_formatted, 1000)
 
   cf_hosts_lists           = [for key, value in cloudflare_teams_list.hosts_lists : value.id]
@@ -73,7 +75,7 @@ resource "cloudflare_teams_rule" "advertisments" {
   description = ""
 
   enabled    = true
-  precedence = 3
+  precedence = 5
 
   filters = ["dns"]
   traffic = "any(dns.content_category[*] in {66 85}) or ${local.cf_hosts_traffic}"
