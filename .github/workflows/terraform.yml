@@ -78,4 +78,4 @@ jobs:
           echo $params >> $GITHUB_OUTPUT
 
       - name: Execute Terraform Configuration
-        run: terraform apply -auto-approve -input=false ${{ steps.params.outputs.params }} tfplan
+        run: terraform apply -auto-approve -input=false ${{ steps.params.outputs.params }}
