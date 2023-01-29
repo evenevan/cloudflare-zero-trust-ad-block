@@ -78,7 +78,7 @@ jobs:
           echo $params >> $GITHUB_OUTPUT
 
       - name: Terraform Plan
-        run: terraform plan -input=false -no-color -out=tfplan ${{ steps.params.outputs.params }} tfplan
+        run: terraform plan -input=false -no-color -out=tfplan ${{ steps.params.outputs.params }}
 
       - name: Terraform Apply
         run: terraform apply -auto-approve -input=false ${{ steps.params.outputs.params }} tfplan
