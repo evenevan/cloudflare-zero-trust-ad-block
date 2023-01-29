@@ -23,12 +23,12 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: Terraform Format Check
+      - name: Check Terraform Configuration Format
         id: fmt
         run: terraform fmt -check
         continue-on-error: true
 
-      - name: Terraform Format
+      - name: Format Terraform Configuration
         if: steps.fmt.outcome == 'failure'
         run: terraform fmt
 
@@ -56,10 +56,10 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: Terraform Init
+      - name: Init Terraform
         run: terraform init
       
-      - name: Terraform Validate
+      - name: Validate Terraform Configuration
         run: terraform validate -no-color
 
       - name: Generate Terraform Parameters
@@ -77,8 +77,5 @@ jobs:
 
           echo $params >> $GITHUB_OUTPUT
 
-      - name: Terraform Plan
-        run: terraform plan -input=false -no-color -out=tfplan ${{ steps.params.outputs.params }}
-
-      - name: Terraform Apply
+      - name: Execute Terraform Configuration
         run: terraform apply -auto-approve -input=false ${{ steps.params.outputs.params }} tfplan
