@@ -68,11 +68,11 @@ jobs:
           params="params=-var=cf_api_token=${{ secrets.CF_API_TOKEN }} -var=cf_account_id=${{ vars.CF_ACCOUNT_ID }}"
 
           if [ '${{ vars.HOSTS_URLS }}' != "" ]; then
-            params+=" -var=hosts_urls=${{ vars.HOSTS_URLS }}"
+            params+=' -var=hosts_urls=${{ vars.HOSTS_URLS }}'
           fi
           
           if [ '${{ vars.HOSTS_INVALID }}' != "" ]; then
-            params+=" -var=hosts_invalid=${{ vars.HOSTS_INVALID }}"
+            params+=' -var=hosts_invalid=${{ vars.HOSTS_INVALID }}'
           fi
 
           echo $params >> $GITHUB_OUTPUT
