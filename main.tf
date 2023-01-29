@@ -19,7 +19,7 @@ terraform {
 }
 
 variable "cf_api_token" {
-  type = string
+  type      = string
   sensitive = true
 }
 
@@ -28,13 +28,13 @@ variable "cf_account_id" {
 }
 
 variable "hosts_invalid" {
-  type = list(string)
+  type    = list(string)
   default = ["127.0.0.1  localhost", "::1  localhost"]
 }
 
 // uses the hosts file format
 variable "hosts_urls" {
-  type = list(string)
+  type    = list(string)
   default = ["https://adaway.org/hosts.txt", "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext", "https://blocklistproject.github.io/Lists/ransomware.txt", "https://blocklistproject.github.io/Lists/tracking.txt"]
 }
 
@@ -43,7 +43,7 @@ provider "cloudflare" {
 }
 
 data "curl" "get_hosts" {
-  for_each = toset(var.hosts_urls)
+  for_each    = toset(var.hosts_urls)
   http_method = "GET"
   uri         = each.value
 }
