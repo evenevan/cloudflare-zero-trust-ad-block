@@ -35,7 +35,12 @@ variable "hosts_invalid" {
 // uses the hosts file format
 variable "hosts_urls" {
   type    = list(string)
-  default = ["https://adaway.org/hosts.txt", "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext", "https://blocklistproject.github.io/Lists/ransomware.txt", "https://blocklistproject.github.io/Lists/tracking.txt"]
+  default = [
+    "https://adaway.org/hosts.txt",
+    "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext",
+    "https://blocklistproject.github.io/Lists/ransomware.txt",
+    "https://blocklistproject.github.io/Lists/tracking.txt"
+  ]
 }
 
 provider "cloudflare" {
