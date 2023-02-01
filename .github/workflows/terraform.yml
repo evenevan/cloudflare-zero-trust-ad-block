@@ -47,16 +47,16 @@ jobs:
     name: "Update Hosts"
     runs-on: ubuntu-latest
     steps:
-      - name: Scan Changes
+      - name: Scan Push Changes
+        if: github.event_name == 'push'
         id: changes
-        uses: trilom/file-changes-action@v1.2.3
+        uses: masesgroup/retrieve-changed-files@v2
 
-      - name: Process Changes
+      - name: Process Push Changes
+        if: github.event_name == 'push'
         id: process
         run: |
-          files='${{ steps.changes.outputs.files }}'
-
-          if [ $files != *".tf"* ]; then
+          if [ ${{ steps.changes.outputs.all  }} != *".tf"* ]; then
             echo "status=skip" >> $GITHUB_OUTPUT
           fi
 
