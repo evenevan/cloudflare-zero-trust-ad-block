@@ -44,25 +44,42 @@ jobs:
           body: 'Format Terraform files'
 
   update:
-    if: github.event_name != 'push'
     name: "Update Hosts"
     runs-on: ubuntu-latest
     steps:
+      - name: Scan Changes
+        id: changes
+        uses: trilom/file-changes-action@v1.2.3
+
+      - name: Process Changes
+        id: process
+        run: |
+          files='${{ steps.changes.outputs.files }}'
+
+          if [ $files != *".tf"* ]; then
+            echo "status=skip" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout Branch
+        if: steps.process.outputs.status != 'skip'
         uses: actions/checkout@v3
 
       - name: Setup Terraform
+        if: steps.process.outputs.status != 'skip'
         uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Init Terraform
+        if: steps.process.outputs.status != 'skip'
         run: terraform init
       
       - name: Validate Terraform Configuration
+        if: steps.process.outputs.status != 'skip'
         run: terraform validate -no-color
 
       - name: Generate Terraform Parameters
+        if: steps.process.outputs.status != 'skip'
         id: params
         run: |
           params="params=-var='cf_api_token=${{ secrets.CF_API_TOKEN }}' -var='cf_account_id=${{ vars.CF_ACCOUNT_ID }}'"
@@ -78,4 +95,5 @@ jobs:
           echo $params >> $GITHUB_OUTPUT
 
       - name: Execute Terraform Configuration
+        if: steps.process.outputs.status != 'skip'
         run: terraform apply -auto-approve -input=false ${{ steps.params.outputs.params }}
