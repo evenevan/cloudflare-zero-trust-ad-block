@@ -56,7 +56,7 @@ jobs:
         if: github.event_name == 'push'
         id: process
         run: |
-          if [ ${{ steps.changes.outputs.all  }} != *".tf"* ]; then
+          if [[ ${{ steps.changes.outputs.all }} != *".tf"* ]]; then
             echo "status=skip" >> $GITHUB_OUTPUT
           fi
 
