@@ -29,7 +29,7 @@ variable "cf_account_id" {
 
 variable "hosts_invalid" {
   type    = list(string)
-  default = ["127.0.0.1  localhost", "::1  localhost", "temp"]
+  default = ["127.0.0.1  localhost", "::1  localhost"]
 }
 
 // uses the hosts file format
