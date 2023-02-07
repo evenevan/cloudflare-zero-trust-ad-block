@@ -34,7 +34,7 @@ variable "hosts_invalid" {
 
 // uses the hosts file format
 variable "hosts_urls" {
-  type    = list(string)
+  type = list(string)
   default = [
     "https://adaway.org/hosts.txt",
     "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext",
